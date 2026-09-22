@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewLetter", menuName = "Postman/Letter Data")]
+[CreateAssetMenu(fileName = "NewLetter", menuName = "Letter Data")]
 public class LetterData : ScriptableObject
 {
     public string letterID;
