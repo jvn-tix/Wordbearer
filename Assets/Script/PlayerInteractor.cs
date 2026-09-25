@@ -3,9 +3,13 @@ using TMPro;
 
 public class PlayerInteractor : MonoBehaviour
 {
-    [Header("UI Reference")]
-    [SerializeField] private GameObject interactPanelUI;
-    [SerializeField] private TextMeshProUGUI promptText;
+    [Header("Default UI Reference")]
+    [SerializeField] private GameObject defaultInteractPanel;
+    [SerializeField] private TextMeshProUGUI defaultPromptText;
+
+    [Header("Door UI Reference")]
+    [SerializeField] private GameObject doorInteractPanel;
+    [SerializeField] private TextMeshProUGUI doorPromptText;
 
     private IInteractable currentInteractable;
 
@@ -15,8 +19,17 @@ public class PlayerInteractor : MonoBehaviour
         {
             currentInteractable = interactable;
 
-            if (promptText != null) promptText.text = interactable.GetPrompt();
-            if (interactPanelUI != null) interactPanelUI.SetActive(true);
+            // Cek apakah objek yang didekati adalah SceneLoader (Pintu)
+            if (interactable is SceneLoader)
+            {
+                if (doorPromptText != null) doorPromptText.text = interactable.GetPrompt();
+                if (doorInteractPanel != null) doorInteractPanel.SetActive(true);
+            }
+            else
+            {
+                if (defaultPromptText != null) defaultPromptText.text = interactable.GetPrompt();
+                if (defaultInteractPanel != null) defaultInteractPanel.SetActive(true);
+            }
         }
     }
 
@@ -26,17 +39,18 @@ public class PlayerInteractor : MonoBehaviour
         {
             currentInteractable = null;
 
-            if (interactPanelUI != null) interactPanelUI.SetActive(false);
+            if (defaultInteractPanel != null) defaultInteractPanel.SetActive(false);
+            if (doorInteractPanel != null) doorInteractPanel.SetActive(false);
         }
     }
 
-    // Fungsi ini dipanggil dari Unity Event pada komponen Player Input
     public void OnInteract()
     {
         if (currentInteractable != null)
         {
             currentInteractable.Interact();
-            if (interactPanelUI != null) interactPanelUI.SetActive(false);
+            if (defaultInteractPanel != null) defaultInteractPanel.SetActive(false);
+            if (doorInteractPanel != null) doorInteractPanel.SetActive(false);
         }
     }
 }

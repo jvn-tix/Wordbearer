@@ -1,44 +1,31 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Wajib untuk pindah scene
-using UnityEngine.InputSystem;     // Wajib untuk New Input System
+using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : MonoBehaviour, IInteractable
 {
-    public string sceneToLoad; // Nama scene tujuan (misal: "Main")
-    public GameObject interactPrompt; // (Opsional) Jika Anda ingin menambahkan prompt "Tekan E" di pintu
-    
-    private bool isPlayerNear = false;
+    [SerializeField] private string sceneToLoad; // Nama scene tujuan (misal: "Main")
+    [SerializeField] private string promptMessage = "Press E to Enter";
 
-    private void Start()
+    public string GetPrompt()
     {
-        if (interactPrompt != null) interactPrompt.SetActive(false);
+        return promptMessage;
     }
 
-    private void Update()
+    // Dipanggil oleh PlayerInteractor saat tombol interaksi ditekan
+    public void Interact()
     {
-        // Jika pemain dekat pintu dan menekan E
-        if (isPlayerNear && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        LoadScene();
+    }
+
+    public void LoadScene()
+    {
+        if (!string.IsNullOrEmpty(sceneToLoad))
         {
-            // Memuat scene tujuan
             SceneManager.LoadScene(sceneToLoad);
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
+        else
         {
-            isPlayerNear = true;
-            if (interactPrompt != null) interactPrompt.SetActive(true);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            isPlayerNear = false;
-            if (interactPrompt != null) interactPrompt.SetActive(false);
+            Debug.LogWarning("Scene To Load belum diisi di Inspector pada " + gameObject.name);
         }
     }
 }
