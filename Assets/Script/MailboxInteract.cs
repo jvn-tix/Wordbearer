@@ -1,26 +1,27 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Wajib untuk pindah scene
-using UnityEngine.InputSystem;     // Wajib untuk New Input System
+using UnityEngine.InputSystem;
 
-public class SceneLoader : MonoBehaviour
+public class MailboxInteract : MonoBehaviour
 {
-    public string sceneToLoad; // Nama scene tujuan (misal: "Main")
-    public GameObject interactPrompt; // (Opsional) Jika Anda ingin menambahkan prompt "Tekan E" di pintu
+    // BARU: Identitas rumah ini (Misal isi dengan "Rumah_A" di Inspector)
+    public string houseID; 
     
     private bool isPlayerNear = false;
+    private BackpackManager backpackManager;
+    public GameObject interactPrompt;
 
     private void Start()
     {
+        backpackManager = FindObjectOfType<BackpackManager>();
         if (interactPrompt != null) interactPrompt.SetActive(false);
     }
 
     private void Update()
     {
-        // Jika pemain dekat pintu dan menekan E
         if (isPlayerNear && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            // Memuat scene tujuan
-            SceneManager.LoadScene(sceneToLoad);
+            // PERUBAHAN: Sekarang kita mengirimkan data kotak pos ini (this) ke Manager
+            backpackManager.OpenBackpackMailbox(this);
         }
     }
 
