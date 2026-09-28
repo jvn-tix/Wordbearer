@@ -59,6 +59,9 @@ TagManager:
   - name: Background
     uniqueID: 1848857955
     locked: 0
+  - name: Frontground
+    uniqueID: 265570103
+    locked: 0
   - name: Interactable
     uniqueID: 1498214979
     locked: 0
