@@ -17,7 +17,7 @@ public class MailPickUp : MonoBehaviour
 
     private void Start()
     {
-        backpackManager = FindObjectOfType<BackpackManager>();
+        backpackManager = FindFirstObjectByType<BackpackManager>();
         
         if (interactPrompt != null)
         {

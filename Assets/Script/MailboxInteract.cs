@@ -12,7 +12,7 @@ public class MailboxInteract : MonoBehaviour
 
     private void Start()
     {
-        backpackManager = FindObjectOfType<BackpackManager>();
+        backpackManager = FindFirstObjectByType<BackpackManager>();
         if (interactPrompt != null) interactPrompt.SetActive(false);
     }
 

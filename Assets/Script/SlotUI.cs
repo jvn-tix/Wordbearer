@@ -10,7 +10,7 @@ public class SlotUI : MonoBehaviour
 
     private void Start()
     {
-        descriptionPanel = FindObjectOfType<ItemDescriptionUI>();
+        descriptionPanel = FindFirstObjectByType<ItemDescriptionUI>();
         RefreshSlot(); // Cek dan atur gambar saat mulai
     }
 

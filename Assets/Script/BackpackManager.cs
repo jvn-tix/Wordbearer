@@ -107,7 +107,7 @@ public class BackpackManager : MonoBehaviour
         backpackWindow.SetActive(true);
         backpackIconBtn.SetActive(false);
         
-        ItemDescriptionUI descUI = FindObjectOfType<ItemDescriptionUI>();
+        ItemDescriptionUI descUI = FindFirstObjectByType<ItemDescriptionUI>();
         if(descUI != null) descUI.ClearDescription();
     }
 

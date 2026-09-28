@@ -14,7 +14,7 @@ public class ItemDescriptionUI : MonoBehaviour
 
     private void Start()
     {
-        backpackManager = FindObjectOfType<BackpackManager>();
+        backpackManager = FindFirstObjectByType<BackpackManager>();
         deliveryButton.SetActive(false); 
     }
 
