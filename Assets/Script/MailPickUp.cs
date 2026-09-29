@@ -11,20 +11,11 @@ public class MailPickUp : MonoBehaviour, IInteractable
     [Header("Interaction Settings")]
     [SerializeField] private string promptMessage = "Press E to Pick Up Mails";
 
-    private BackpackManager backpackManager;
-
-    private void Start()
-    {
-        backpackManager = FindFirstObjectByType<BackpackManager>();
-    }
-
-    // Dipanggil oleh PlayerInteractor untuk menampilkan petunjuk UI
     public string GetPrompt()
     {
         return promptMessage;
     }
 
-    // Dipanggil otomatis oleh PlayerInteractor saat tombol interaksi ditekan
     public void Interact()
     {
         PickUpMails();
@@ -38,9 +29,12 @@ public class MailPickUp : MonoBehaviour, IInteractable
             return;
         }
 
-        if (backpackManager == null)
+        // Ambil instance BackpackManager secara langsung saat interaksi
+        BackpackManager backpack = BackpackManager.Instance != null ? BackpackManager.Instance : FindFirstObjectByType<BackpackManager>();
+
+        if (backpack == null)
         {
-            Debug.LogError("BackpackManager tidak ditemukan di Scene!");
+            Debug.LogError("[MailPickUp] BackpackManager tidak ditemukan di Scene!");
             return;
         }
 
@@ -48,8 +42,11 @@ public class MailPickUp : MonoBehaviour, IInteractable
         int amountToPickup = Random.Range(minPickup, maxPickup + 1);
         amountToPickup = Mathf.Min(amountToPickup, possibleMails.Length);
 
-        // 2. Buat "Salinan" dari daftar surat ke dalam bentuk List
+        backpack.SetDailyMails(amountToPickup);
+
+        // 2. Buat "Salinan" dari daftar surat
         List<ItemData> availableMails = new List<ItemData>(possibleMails);
+        int actualAddedCount = 0;
 
         for (int i = 0; i < amountToPickup; i++)
         {
@@ -57,11 +54,15 @@ public class MailPickUp : MonoBehaviour, IInteractable
             ItemData selectedMail = availableMails[randomIndex];
 
             // Masukkan ke tas
-            backpackManager.AddItemToInventory(selectedMail);
+            backpack.AddItemToInventory(selectedMail);
+            actualAddedCount++;
 
             // Hapus surat dari List agar tidak terduplikasi
             availableMails.RemoveAt(randomIndex);
         }
+
+        // Set target harian sesuai jumlah surat yang benar-benar diambil dan dimasukkan
+        backpack.SetDailyMails(actualAddedCount);
 
         if (TutorialUI.Instance != null &&
             TutorialUI.Instance.GetCurrentQuestStep() == TutorialUI.QuestStep.PickUpMails)
@@ -69,7 +70,7 @@ public class MailPickUp : MonoBehaviour, IInteractable
             TutorialUI.Instance.UpdateQuestStep(TutorialUI.QuestStep.DeliverMails);
         }
 
-        Debug.Log("Berhasil mengambil " + amountToPickup + " surat unik!");
+        Debug.Log($"[MailPickUp] Berhasil mengambil {actualAddedCount} surat! Target EndOfDay diset ke: {actualAddedCount}");
         Destroy(gameObject);
     }
 }

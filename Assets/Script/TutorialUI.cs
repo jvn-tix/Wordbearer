@@ -5,9 +5,9 @@ using TMPro;
 
 public class TutorialUI : MonoBehaviour
 {
-    public static TutorialUI Instance;
+    public static TutorialUI Instance { get; private set; }
 
-    [Header("UI References (Akan terisi otomatis jika pakai Tag / Auto-Find)")]
+    [Header("UI References")]
     [SerializeField] private CanvasGroup questCanvasGroup;
     [SerializeField] private TextMeshProUGUI questText;
 
@@ -22,70 +22,80 @@ public class TutorialUI : MonoBehaviour
         TutorialComplete   // 4. Selesai (Sembunyikan UI)
     }
 
-    private QuestStep currentStep = QuestStep.EnterOffice;
+    // UBAH MENJADI STATIC AGAR STATUS PROGRESS TERPADA JIKA RELOAD SCENE / NEXT DAY
+    public static QuestStep currentStep = QuestStep.EnterOffice;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Supaya state quest tidak hilang saat pindah scene
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
             return;
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        // Daftarkan event saat scene selesai di-load
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        // Unregister event saat objek dimatikan/dihancurkan
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    // Fungsi ini dipanggil OTOMATIS setiap kali pindah ke scene baru
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Jika tutorial sudah selesai, tidak perlu mencari UI lagi
-        if (currentStep == QuestStep.TutorialComplete) return;
-
-        // Cari UI Tutorial di scene baru yang baru di-load
+        // Auto-find jika reference di Inspector tidak di-drag manual
         FindUIReferences();
 
-        // Perbarui teks UI di scene baru sesuai progres quest saat ini
-        UpdateQuestTextUI();
+        // JIKA TUTORIAL SUDAH SELESAI (MISAL DI NEXT DAY), LANGSUNG SEMBUNYIKAN PANEL
+        if (currentStep == QuestStep.TutorialComplete)
+        {
+            HidePanelImmediately();
+        }
+        else
+        {
+            UpdateQuestTextUI();
+        }
     }
 
     public void FindUIReferences()
     {
-        // Cara 1: Cari objek berdasarkan Tag "TutorialPanel"
-        GameObject panelObj = GameObject.FindWithTag("TutorialPanel");
-        if (panelObj != null)
+        if (questCanvasGroup == null || questText == null)
         {
-            questCanvasGroup = panelObj.GetComponent<CanvasGroup>();
-            questText = panelObj.GetComponentInChildren<TextMeshProUGUI>();
+            GameObject panelObj = GameObject.FindWithTag("TutorialPanel");
+            if (panelObj != null)
+            {
+                if (questCanvasGroup == null) questCanvasGroup = panelObj.GetComponent<CanvasGroup>();
+                if (questText == null) questText = panelObj.GetComponentInChildren<TextMeshProUGUI>();
+            }
         }
     }
 
     public void UpdateQuestStep(QuestStep newStep)
     {
         currentStep = newStep;
-        UpdateQuestTextUI();
+
+        if (currentStep == QuestStep.TutorialComplete)
+        {
+            if (gameObject.activeInHierarchy && questCanvasGroup != null)
+            {
+                StartCoroutine(HideQuestPanel());
+            }
+            else
+            {
+                HidePanelImmediately();
+            }
+        }
+        else
+        {
+            UpdateQuestTextUI();
+        }
     }
 
     private void UpdateQuestTextUI()
     {
-        // Pastikan referensi UI tidak missing sebelum dipakai
-        if (questCanvasGroup == null || questText == null)
+        FindUIReferences();
+
+        if (currentStep == QuestStep.TutorialComplete)
         {
-            FindUIReferences();
+            HidePanelImmediately();
+            return;
         }
 
         switch (currentStep)
@@ -102,12 +112,6 @@ public class TutorialUI : MonoBehaviour
                 if (questText != null) questText.text = "- Deliver mails to the correct houses based from the description";
                 break;
 
-            case QuestStep.TutorialComplete:
-                if (questCanvasGroup != null)
-                {
-                    StartCoroutine(HideQuestPanel());
-                }
-                break;
         }
     }
 
@@ -122,10 +126,20 @@ public class TutorialUI : MonoBehaviour
             yield return null;
         }
 
+        HidePanelImmediately();
+    }
+
+    private void HidePanelImmediately()
+    {
         if (questCanvasGroup != null)
         {
             questCanvasGroup.alpha = 0f;
+            questCanvasGroup.blocksRaycasts = false;
             questCanvasGroup.gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(false);
         }
     }
 

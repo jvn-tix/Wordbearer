@@ -1,69 +1,104 @@
 using UnityEngine;
-using TMPro; // Untuk UI Teks Rating
+using TMPro;
 
 public class BackpackManager : MonoBehaviour
 {
-    public GameObject backpackWindow; 
-    public GameObject backpackIconBtn; 
-    public SlotUI[] inventorySlots; 
-    
-    [HideInInspector] public bool isDeliveryMode = false; 
-    
-    // BARU: Menyimpan kotak pos mana yang sedang diakses
-    [HideInInspector] public MailboxInteract currentMailbox; 
+    public static BackpackManager Instance { get; private set; }
 
-    // BARU: UI Teks untuk menampilkan rating
+    public GameObject backpackWindow;
+    public GameObject backpackIconBtn;
+    public SlotUI[] inventorySlots;
+
+    [HideInInspector] public bool isDeliveryMode = false;
+    [HideInInspector] public MailboxInteract currentMailbox;
+
     public TextMeshProUGUI ratingTextUI;
 
-    public static ItemData[] savedItems = new ItemData[10]; 
-    
-    // Memori permanen untuk rating (misal mulai dari angka 50)
-    public static int playerRating = 50; 
+    // --- STATIC DATA (PERSISTEN ANTAR SCENE) ---
+    public static ItemData[] savedItems = new ItemData[10];
+    public static int playerRating = 50;
+    public static int totalMailsToday = 0;
+    public static int deliveredMailsCount = 0;
 
-    // BARU: Fungsi ini otomatis dipanggil oleh Unity tepat SEBELUM game dimulai (saat tombol Play ditekan)
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void ResetStaticData()
+    private void Awake()
     {
-        savedItems = new ItemData[10]; // Menghapus sisa barang dari test sebelumnya
-        playerRating = 50;             // Mereset rating kembali ke 50
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    // Fungsi ini dipanggil manual HANYA jika ingin reset total (misal saat Game Over / Back to Main Menu)
+    public static void ResetAllGameData()
+    {
+        savedItems = new ItemData[10];
+        playerRating = 50;
+        totalMailsToday = 0;
+        deliveredMailsCount = 0;
     }
 
     private void Start()
     {
-        backpackWindow.SetActive(false);
-        backpackIconBtn.SetActive(true);
-        
-        UpdateRatingUI(); // Tampilkan rating saat mulai
+        if (backpackWindow != null) backpackWindow.SetActive(false);
+        if (backpackIconBtn != null) backpackIconBtn.SetActive(true);
+
+        UpdateRatingUI();
 
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             if (i < savedItems.Length && savedItems[i] != null)
             {
-                inventorySlots[i].SetItem(savedItems[i]); 
+                inventorySlots[i].SetItem(savedItems[i]);
             }
             else
             {
-                inventorySlots[i].ClearItem(); 
+                inventorySlots[i].ClearItem();
             }
         }
     }
 
     private void OnDestroy()
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
+        if (inventorySlots != null)
         {
-            if (i < savedItems.Length) savedItems[i] = inventorySlots[i].itemInSlot;
+            for (int i = 0; i < inventorySlots.Length; i++)
+            {
+                if (i < savedItems.Length && inventorySlots[i] != null)
+                {
+                    savedItems[i] = inventorySlots[i].itemInSlot;
+                }
+            }
         }
     }
 
-    // --- FUNGSI RATING BARU ---
+    // --- FUNGSI TRACKING SURAT HARI INI ---
+    public void SetDailyMails(int randomAmount)
+    {
+        totalMailsToday = randomAmount;
+        deliveredMailsCount = 0; // Reset hitungan pengiriman untuk hari baru
+        Debug.Log($"[BackpackManager] SetDailyMails dipanggil. Total Mails Hari Ini: {totalMailsToday}");
+    }
+
+    public bool IsAllMailsProcessed()
+    {
+        Debug.Log($"[BackpackManager Cek Status] Terkirim: {deliveredMailsCount} / Target: {totalMailsToday}");
+        return totalMailsToday > 0 && deliveredMailsCount >= totalMailsToday;
+    }
+
+    public int GetRating()
+    {
+        return playerRating;
+    }
+
     public void ChangeRating(int amount)
     {
-        playerRating += amount; // Tambah/kurang rating
-        
-        // Jaga agar rating tidak kurang dari 0 atau lebih dari 100 (opsional)
-        playerRating = Mathf.Clamp(playerRating, 0, 100); 
-        
+        playerRating += amount;
+        playerRating = Mathf.Clamp(playerRating, 0, 100);
         UpdateRatingUI();
     }
 
@@ -82,40 +117,39 @@ public class BackpackManager : MonoBehaviour
             if (inventorySlots[i].itemInSlot == null)
             {
                 inventorySlots[i].SetItem(itemToAdd);
-                return; 
+                return;
             }
         }
     }
 
     public void OpenBackpackNormal()
     {
-        isDeliveryMode = false; 
-        currentMailbox = null; // Kosongkan
+        isDeliveryMode = false;
+        currentMailbox = null;
         OpenBackpack();
     }
 
-    // PERUBAHAN: Menerima data kotak pos yang dibuka
     public void OpenBackpackMailbox(MailboxInteract mailbox)
     {
-        isDeliveryMode = true; 
-        currentMailbox = mailbox; // Simpan data kotak pos
+        isDeliveryMode = true;
+        currentMailbox = mailbox;
         OpenBackpack();
     }
 
     private void OpenBackpack()
     {
-        backpackWindow.SetActive(true);
-        backpackIconBtn.SetActive(false);
-        
+        if (backpackWindow != null) backpackWindow.SetActive(true);
+        if (backpackIconBtn != null) backpackIconBtn.SetActive(false);
+
         ItemDescriptionUI descUI = FindFirstObjectByType<ItemDescriptionUI>();
-        if(descUI != null) descUI.ClearDescription();
+        if (descUI != null) descUI.ClearDescription();
     }
 
     public void CloseBackpack()
     {
-        backpackWindow.SetActive(false);
-        backpackIconBtn.SetActive(true);
-        isDeliveryMode = false; 
-        currentMailbox = null; 
+        if (backpackWindow != null) backpackWindow.SetActive(false);
+        if (backpackIconBtn != null) backpackIconBtn.SetActive(true);
+        isDeliveryMode = false;
+        currentMailbox = null;
     }
 }
