@@ -63,6 +63,12 @@ public class MailPickUp : MonoBehaviour, IInteractable
             availableMails.RemoveAt(randomIndex);
         }
 
+        if (TutorialUI.Instance != null &&
+            TutorialUI.Instance.GetCurrentQuestStep() == TutorialUI.QuestStep.PickUpMails)
+        {
+            TutorialUI.Instance.UpdateQuestStep(TutorialUI.QuestStep.DeliverMails);
+        }
+
         Debug.Log("Berhasil mengambil " + amountToPickup + " surat unik!");
         Destroy(gameObject);
     }

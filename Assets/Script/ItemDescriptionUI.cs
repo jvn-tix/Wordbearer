@@ -63,6 +63,10 @@ public class ItemDescriptionUI : MonoBehaviour
                 // BENAR! Tambah 10 poin
                 backpackManager.ChangeRating(10);
                 NotificationUI.Instance.ShowSuccessNotification();
+                if(TutorialUI.Instance != null && TutorialUI.Instance.GetCurrentQuestStep() == TutorialUI.QuestStep.DeliverMails)
+                {
+                    TutorialUI.Instance.UpdateQuestStep(TutorialUI.QuestStep.TutorialComplete);
+                }
                 Debug.Log("PENGIRIMAN SUKSES! Rating Naik.");
             }
             else

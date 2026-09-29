@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NotificationUI : MonoBehaviour
 {
@@ -16,12 +17,48 @@ public class NotificationUI : MonoBehaviour
     private void Awake()
     {
         // Setup Singleton agar NotificationUI mudah dipanggil dari mana saja
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null) {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); 
+        } else {
+            Destroy(gameObject);
+        }
 
         // Sembunyikan panel di awal secara aman via CanvasGroup Alpha
         InitCanvasGroup(successCanvasGroup);
         InitCanvasGroup(failCanvasGroup);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindNotificationPanels();
+    }
+
+    public void FindNotificationPanels()
+    {
+        GameObject successObj = GameObject.FindWithTag("SuccessPanel");
+        if (successObj != null)
+        {
+            successCanvasGroup = successObj.GetComponent<CanvasGroup>();
+            InitCanvasGroup(successCanvasGroup);
+        }
+
+        GameObject failObj = GameObject.FindWithTag("FailPanel");
+        if (failObj != null)
+        {
+            failCanvasGroup = failObj.GetComponent<CanvasGroup>();
+            InitCanvasGroup(failCanvasGroup);
+        }
     }
 
     private void InitCanvasGroup(CanvasGroup cg)
