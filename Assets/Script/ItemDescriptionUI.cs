@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class ItemDescriptionUI : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI descriptionText;
     public Image iconImage;
-    public GameObject deliveryButton; 
-    
+    public GameObject deliveryButton;
+
     private BackpackManager backpackManager;
     private SlotUI activeSlot; 
 
@@ -16,7 +17,9 @@ public class ItemDescriptionUI : MonoBehaviour
     {
         backpackManager = FindFirstObjectByType<BackpackManager>();
         deliveryButton.SetActive(false); 
+
     }
+
 
     public void UpdateDescription(SlotUI slot)
     {
@@ -59,23 +62,24 @@ public class ItemDescriptionUI : MonoBehaviour
             {
                 // BENAR! Tambah 10 poin
                 backpackManager.ChangeRating(10);
+                NotificationUI.Instance.ShowSuccessNotification();
                 Debug.Log("PENGIRIMAN SUKSES! Rating Naik.");
             }
             else
             {
                 // SALAH! Kurangi 5 poin
                 backpackManager.ChangeRating(-5);
+                NotificationUI.Instance.ShowFailNotification();
                 Debug.Log("SALAH ALAMAT! Rating Turun.");
             }
 
             activeSlot.ClearItem(); 
-            ClearDescription();     
-            
+            ClearDescription();
+
             // Opsional: Tutup tas otomatis setelah menekan tombol kirim
-            backpackManager.CloseBackpack(); 
+            backpackManager.CloseBackpack();
         }
     }
-
     public void ClearDescription()
     {
         activeSlot = null;
