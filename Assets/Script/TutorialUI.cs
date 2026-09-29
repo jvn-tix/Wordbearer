@@ -5,9 +5,9 @@ using TMPro;
 
 public class TutorialUI : MonoBehaviour
 {
-    public static TutorialUI Instance { get; private set; }
+    public static TutorialUI Instance;
 
-    [Header("UI References")]
+    [Header("UI References (Akan terisi otomatis jika pakai Tag / Auto-Find)")]
     [SerializeField] private CanvasGroup questCanvasGroup;
     [SerializeField] private TextMeshProUGUI questText;
 
@@ -22,80 +22,87 @@ public class TutorialUI : MonoBehaviour
         TutorialComplete   // 4. Selesai (Sembunyikan UI)
     }
 
-    // UBAH MENJADI STATIC AGAR STATUS PROGRESS TERPADA JIKA RELOAD SCENE / NEXT DAY
-    public static QuestStep currentStep = QuestStep.EnterOffice;
+    private QuestStep currentStep = QuestStep.EnterOffice;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); // Bertahan antar-scene sesuai struktur game kamu
         }
-        else if (Instance != this)
+        else
         {
             Destroy(gameObject);
             return;
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        // Auto-find jika reference di Inspector tidak di-drag manual
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Paksa reset reference UI dari scene lama yang sudah destroyed oleh Unity
+        questCanvasGroup = null;
+        questText = null;
+
+        // Cari UI di scene baru
         FindUIReferences();
 
-        // JIKA TUTORIAL SUDAH SELESAI (MISAL DI NEXT DAY), LANGSUNG SEMBUNYIKAN PANEL
+        // Jika tutorial sudah lengkap (misal masuk Next Day), sembunyikan UI di scene baru ini
         if (currentStep == QuestStep.TutorialComplete)
         {
-            HidePanelImmediately();
+            if (questCanvasGroup != null)
+            {
+                questCanvasGroup.alpha = 0f;
+                questCanvasGroup.blocksRaycasts = false;
+                questCanvasGroup.gameObject.SetActive(false);
+            }
+            return;
         }
-        else
-        {
-            UpdateQuestTextUI();
-        }
+
+        // Jika belum selesai, tampilkan UI dan perbarui teks
+        UpdateQuestTextUI();
     }
 
     public void FindUIReferences()
     {
-        if (questCanvasGroup == null || questText == null)
+        // Cari objek berdasarkan Tag "TutorialPanel" di scene yang sedang aktif
+        GameObject panelObj = GameObject.FindWithTag("TutorialPanel");
+        if (panelObj != null)
         {
-            GameObject panelObj = GameObject.FindWithTag("TutorialPanel");
-            if (panelObj != null)
-            {
-                if (questCanvasGroup == null) questCanvasGroup = panelObj.GetComponent<CanvasGroup>();
-                if (questText == null) questText = panelObj.GetComponentInChildren<TextMeshProUGUI>();
-            }
+            questCanvasGroup = panelObj.GetComponent<CanvasGroup>();
+            questText = panelObj.GetComponentInChildren<TextMeshProUGUI>();
         }
     }
 
     public void UpdateQuestStep(QuestStep newStep)
     {
         currentStep = newStep;
-
-        if (currentStep == QuestStep.TutorialComplete)
-        {
-            if (gameObject.activeInHierarchy && questCanvasGroup != null)
-            {
-                StartCoroutine(HideQuestPanel());
-            }
-            else
-            {
-                HidePanelImmediately();
-            }
-        }
-        else
-        {
-            UpdateQuestTextUI();
-        }
+        UpdateQuestTextUI();
     }
 
     private void UpdateQuestTextUI()
     {
-        FindUIReferences();
-
-        if (currentStep == QuestStep.TutorialComplete)
+        // Cek apakah reference missing/null, lalu cari ulang
+        if (questCanvasGroup == null || questText == null)
         {
-            HidePanelImmediately();
-            return;
+            FindUIReferences();
+        }
+
+        if (questCanvasGroup != null)
+        {
+            questCanvasGroup.alpha = 1f;
+            questCanvasGroup.blocksRaycasts = true;
+            questCanvasGroup.gameObject.SetActive(true);
         }
 
         switch (currentStep)
@@ -109,9 +116,15 @@ public class TutorialUI : MonoBehaviour
                 break;
 
             case QuestStep.DeliverMails:
-                if (questText != null) questText.text = "- Deliver mails to the correct houses based from the description";
+                if (questText != null) questText.text = "- Deliver mails to the correct houses based from description";
                 break;
 
+            case QuestStep.TutorialComplete:
+                if (questCanvasGroup != null && gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(HideQuestPanel());
+                }
+                break;
         }
     }
 
@@ -126,20 +139,11 @@ public class TutorialUI : MonoBehaviour
             yield return null;
         }
 
-        HidePanelImmediately();
-    }
-
-    private void HidePanelImmediately()
-    {
         if (questCanvasGroup != null)
         {
             questCanvasGroup.alpha = 0f;
             questCanvasGroup.blocksRaycasts = false;
             questCanvasGroup.gameObject.SetActive(false);
-        }
-        else
-        {
-            gameObject.SetActive(false);
         }
     }
 

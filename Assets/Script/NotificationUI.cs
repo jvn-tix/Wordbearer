@@ -17,14 +17,17 @@ public class NotificationUI : MonoBehaviour
     private void Awake()
     {
         // Setup Singleton agar NotificationUI mudah dipanggil dari mana saja
-        if (Instance == null) {
+        if (Instance == null)
+        {
             Instance = this;
-            DontDestroyOnLoad(gameObject); 
-        } else {
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
             Destroy(gameObject);
+            return;
         }
 
-        // Sembunyikan panel di awal secara aman via CanvasGroup Alpha
         InitCanvasGroup(successCanvasGroup);
         InitCanvasGroup(failCanvasGroup);
     }
@@ -37,10 +40,24 @@ public class NotificationUI : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        // Hentikan coroutine saat script disable agar tidak mengeksekusi UI yang sudah destroyed
+        StopAllCoroutines();
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Hentikan coroutine dari scene sebelumnya
+        StopAllCoroutines();
+
+        // Bersihkan reference scene lama
+        successCanvasGroup = null;
+        failCanvasGroup = null;
+
         FindNotificationPanels();
     }
 
@@ -74,6 +91,9 @@ public class NotificationUI : MonoBehaviour
 
     public void ShowSuccessNotification()
     {
+        // Cari ulang jika reference missing/null
+        if (successCanvasGroup == null) FindNotificationPanels();
+
         if (successCanvasGroup != null)
         {
             StopAllCoroutines();
@@ -83,6 +103,9 @@ public class NotificationUI : MonoBehaviour
 
     public void ShowFailNotification()
     {
+        // Cari ulang jika reference missing/null
+        if (failCanvasGroup == null) FindNotificationPanels();
+
         if (failCanvasGroup != null)
         {
             StopAllCoroutines();
@@ -92,14 +115,21 @@ public class NotificationUI : MonoBehaviour
 
     private IEnumerator FadeRoutine(CanvasGroup cg)
     {
+        if (cg == null) yield break;
+
         // 1. Fade In (Muncul)
         float timer = 0f;
         while (timer < fadeDuration)
         {
+            // Null check setiap frame agar tidak throw MissingReferenceException saat scene reload
+            if (cg == null) yield break;
+
             timer += Time.deltaTime;
             cg.alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
             yield return null;
         }
+
+        if (cg == null) yield break;
         cg.alpha = 1f;
 
         // 2. Tahan Sebentar di Layar
@@ -109,10 +139,16 @@ public class NotificationUI : MonoBehaviour
         timer = 0f;
         while (timer < fadeDuration)
         {
+            if (cg == null) yield break;
+
             timer += Time.deltaTime;
             cg.alpha = Mathf.Lerp(1f, 0f, timer / fadeDuration);
             yield return null;
         }
-        cg.alpha = 0f;
+
+        if (cg != null)
+        {
+            cg.alpha = 0f;
+        }
     }
 }

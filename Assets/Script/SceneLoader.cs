@@ -21,7 +21,7 @@ public class SceneLoader : MonoBehaviour, IInteractable
     {
         if (!string.IsNullOrEmpty(sceneToLoad))
         {
-            SceneManager.LoadScene(sceneToLoad);
+            SceneFader.Instance.FadeToScene(sceneToLoad);
         }
         else
         {

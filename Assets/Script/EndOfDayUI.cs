@@ -104,8 +104,13 @@ public class EndOfDayUI : MonoBehaviour
 
     private void OnNextDayClicked()
     {
-        // Restart scene saat ini
-        Scene activeScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(activeScene.name);
+        if (SceneFader.Instance != null)
+        {
+            SceneFader.Instance.FadeToScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
