@@ -53,6 +53,10 @@ public class MailPickUp : MonoBehaviour, IInteractable
             int randomIndex = Random.Range(0, availableMails.Count);
             ItemData selectedMail = availableMails[randomIndex];
 
+            if(selectedMail != null)
+            {
+                selectedMail.timePickedUp = Time.time; // Set waktu pengambilan surat
+            }
             // Masukkan ke tas
             backpack.AddItemToInventory(selectedMail);
             actualAddedCount++;

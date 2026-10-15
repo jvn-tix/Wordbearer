@@ -9,5 +9,7 @@ public class ItemData : ScriptableObject
     public string itemDescription;
     
     // BARU: Kunci jawaban untuk mencocokkan dengan kotak pos
-    public string targetHouse; 
+    public string targetHouse;
+
+    [HideInInspector] public float timePickedUp; // Waktu saat item diambil dari rumah
 }

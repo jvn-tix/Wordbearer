@@ -16,7 +16,7 @@ public class BackpackManager : MonoBehaviour
 
     // --- STATIC DATA (PERSISTEN ANTAR SCENE) ---
     public static ItemData[] savedItems = new ItemData[10];
-    public static int playerRating = 50;
+    public static int playerRating = 0;
     public static int totalMailsToday = 0;
     public static int deliveredMailsCount = 0;
 
@@ -33,13 +33,22 @@ public class BackpackManager : MonoBehaviour
         }
     }
 
-    // Fungsi ini dipanggil manual HANYA jika ingin reset total (misal saat Game Over / Back to Main Menu)
+    // Fungsi ini dipanggil manual atau saat Next Day untuk mereset progres harian & rating jika diinginkan
     public static void ResetAllGameData()
     {
         savedItems = new ItemData[10];
-        playerRating = 50;
+        playerRating = 0; // Reset rating ke 0 (atau ke nilai awal misal 50 jika mau)
         totalMailsToday = 0;
         deliveredMailsCount = 0;
+    }
+
+    // --- KHUSUS RESET SAAT NEXT DAY ---
+    public void ResetForNextDay()
+    {
+        totalMailsToday = 0;
+        deliveredMailsCount = 0;
+        playerRating = 0; // Reset rating ke 0 (atau ke nilai awal misal 50 jika mau)
+        UpdateRatingUI();
     }
 
     private void Start()
@@ -80,7 +89,7 @@ public class BackpackManager : MonoBehaviour
     public void SetDailyMails(int randomAmount)
     {
         totalMailsToday = randomAmount;
-        deliveredMailsCount = 0; // Reset hitungan pengiriman untuk hari baru
+        deliveredMailsCount = 0;
         Debug.Log($"[BackpackManager] SetDailyMails dipanggil. Total Mails Hari Ini: {totalMailsToday}");
     }
 
@@ -95,6 +104,40 @@ public class BackpackManager : MonoBehaviour
         return playerRating;
     }
 
+    // --- SISTEM RATING DINAMIS (TIDAK MONOTON KELIPATAN 5) ---
+    public void CalculateAndApplyRating(bool isSuccess, float deliveryTimeSeconds, bool isLongDistance)
+    {
+        int basePoints = isSuccess ? 10 : -15; // Poin dasar sukses / gagal
+
+        if (isSuccess)
+        {
+            // 1. Faktor Kecepatan: Makin cepat antar, makin besar bonusnya (maksimal +5)
+            float speedBonus = Mathf.Max(0, (30f - deliveryTimeSeconds) / 6f);
+
+            // 2. Faktor Jarak: Rumah jauh diberi bonus ekstra (+3)
+            int distanceBonus = isLongDistance ? 3 : 0;
+
+            // 3. Variasi Acak agar tidak monoton (angka acak antara -1 sampai +2)
+            int randomVariance = Random.Range(-1, 3);
+
+            // Total penambahan dihitung dinamis
+            int finalAdd = Mathf.RoundToInt(basePoints + speedBonus + distanceBonus + randomVariance);
+
+            playerRating += finalAdd;
+        }
+        else
+        {
+            // Jika salah kirim, berikan penalti dengan variasi acak kecil
+            int randomPenalty = Random.Range(-2, 3);
+            playerRating += (basePoints + randomPenalty);
+        }
+
+        // Batasi rating selalu di rentang 0 sampai 100
+        playerRating = Mathf.Clamp(playerRating, 0, 100);
+        UpdateRatingUI();
+    }
+
+    // (Opsional jika masih butuh fungsi lama untuk testing langsung)
     public void ChangeRating(int amount)
     {
         playerRating += amount;
@@ -106,7 +149,7 @@ public class BackpackManager : MonoBehaviour
     {
         if (ratingTextUI != null)
         {
-            ratingTextUI.text = "Rating: " + playerRating.ToString();
+            ratingTextUI.text = "Rating: " + playerRating.ToString() + "%";
         }
     }
 

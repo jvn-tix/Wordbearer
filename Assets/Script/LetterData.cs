@@ -8,4 +8,6 @@ public class LetterData : ScriptableObject
     public string clueText;
     public string targetHouseID; // Samakan dengan ID Rumah tujuan
     public Sprite letterSprite;
+
+    [HideInInspector] public float timePickedUp;
 }

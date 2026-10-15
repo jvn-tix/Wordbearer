@@ -870,10 +870,10 @@ RectTransform:
   - {fileID: 398000157}
   m_Father: {fileID: 1565368589}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 848.5, y: 500.80005}
-  m_SizeDelta: {x: -1720, y: -1030}
+  m_AnchoredPosition: {x: -111.5, y: -39.19995}
+  m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &152801781
 MonoBehaviour:
@@ -1999,6 +1999,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NotificationUI
   successCanvasGroup: {fileID: 1330682540}
   failCanvasGroup: {fileID: 735081279}
+  successText: {fileID: 1460491263}
+  failText: {fileID: 855575277}
   fadeDuration: 0.4
   displayDuration: 1.5
 --- !u!4 &364290884
@@ -2064,6 +2066,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: PurpleHouse
   interactPrompt: {fileID: 1179806246}
+  postOfficeTransform: {fileID: 0}
+  longDistanceThreshold: 25
 --- !u!61 &393584908
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2241,7 +2245,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Rating: 50'
+  m_text: 'Rating: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0d8ab0e4a5882684cbe2df93f1da33f0, type: 2}
   m_sharedMaterial: {fileID: 975143718597673630, guid: 0d8ab0e4a5882684cbe2df93f1da33f0, type: 2}
@@ -2268,7 +2272,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36.7
+  m_fontSize: 41.4
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3088,6 +3092,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: BlueHouse
   interactPrompt: {fileID: 1179806246}
+  postOfficeTransform: {fileID: 0}
+  longDistanceThreshold: 25
 --- !u!61 &593877846
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7400,6 +7406,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: GreenHouse
   interactPrompt: {fileID: 1179806246}
+  postOfficeTransform: {fileID: 0}
+  longDistanceThreshold: 25
 --- !u!61 &1724741661
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8932,7 +8940,7 @@ GameObject:
   - component: {fileID: 1885749181}
   m_Layer: 0
   m_Name: PostOffice
-  m_TagString: Untagged
+  m_TagString: PostOffice
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9145,7 +9153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.9484253, y: 26.53778}
+  m_AnchoredPosition: {x: 2.9483643, y: 26.53778}
   m_SizeDelta: {x: -206.4061, y: -159.2272}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1950645930
@@ -9544,6 +9552,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: RedHouse
   interactPrompt: {fileID: 1179806246}
+  postOfficeTransform: {fileID: 0}
+  longDistanceThreshold: 25
 --- !u!61 &2133910900
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9697,6 +9707,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: OrangeHouse
   interactPrompt: {fileID: 1179806246}
+  postOfficeTransform: {fileID: 0}
+  longDistanceThreshold: 25
 --- !u!61 &2141505643
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9847,19 +9859,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1396.8647
+      value: 523.13525
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -840.4493
+      value: 235.55072
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9891,11 +9903,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 695.0874
+      value: -264.9126
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 323
+      value: -215
       objectReference: {fileID: 0}
     - target: {fileID: 4227661396681068493, guid: 3fb43ce265983014d8395189ca8d315f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

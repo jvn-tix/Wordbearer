@@ -10,6 +10,10 @@ public class MailboxInteract : MonoBehaviour
     private BackpackManager backpackManager;
     public GameObject interactPrompt;
 
+    [Header("Distance Settings")]
+    [SerializeField] private Transform postOfficeTransform;
+    [SerializeField] private float longDistanceThreshold = 25f;
+
     private void Start()
     {
         backpackManager = FindFirstObjectByType<BackpackManager>();
@@ -41,5 +45,21 @@ public class MailboxInteract : MonoBehaviour
             isPlayerNear = false;
             if (interactPrompt != null) interactPrompt.SetActive(false);
         }
+    }
+
+    public bool CheckIsLongDistance()
+    {
+        if (postOfficeTransform == null)
+        {
+            GameObject po = GameObject.FindGameObjectWithTag("PostOffice");
+            if (po != null) postOfficeTransform = po.transform;
+        }
+
+        if (postOfficeTransform != null)
+        {
+            float distance = Vector3.Distance(postOfficeTransform.position, transform.position);
+            return distance >= longDistanceThreshold;
+        }
+        return false;
     }
 }

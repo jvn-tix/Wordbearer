@@ -104,6 +104,11 @@ public class EndOfDayUI : MonoBehaviour
 
     private void OnNextDayClicked()
     {
+        if(BackpackManager.Instance != null)
+        {
+            BackpackManager.Instance.ResetForNextDay();
+        }
+
         if (SceneFader.Instance != null)
         {
             SceneFader.Instance.FadeToScene(SceneManager.GetActiveScene().name);

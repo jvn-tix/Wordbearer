@@ -1,22 +1,26 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro; // Pastikan namespace ini ada
 
 public class NotificationUI : MonoBehaviour
 {
     public static NotificationUI Instance;
 
     [Header("Notification UI Panels")]
-    [SerializeField] private CanvasGroup successCanvasGroup; // Drag CanvasGroup dari SuccessPanel
-    [SerializeField] private CanvasGroup failCanvasGroup;    // Drag CanvasGroup dari FailPanel
+    [SerializeField] private CanvasGroup successCanvasGroup;
+    [SerializeField] private CanvasGroup failCanvasGroup;
+
+    [Header("Text References (Opsional untuk menampilkan angka)")]
+    [SerializeField] private TextMeshProUGUI successText; // Drag teks di dalam SuccessPanel
+    [SerializeField] private TextMeshProUGUI failText;    // Drag teks di dalam FailPanel
 
     [Header("Notification Timings")]
-    [SerializeField] private float fadeDuration = 0.4f;    // Durasi Fade In & Fade Out
-    [SerializeField] private float displayDuration = 1.5f; // Durasi Notifikasi Diam di Layar
+    [SerializeField] private float fadeDuration = 0.4f;
+    [SerializeField] private float displayDuration = 1.5f;
 
     private void Awake()
     {
-        // Setup Singleton agar NotificationUI mudah dipanggil dari mana saja
         if (Instance == null)
         {
             Instance = this;
@@ -40,7 +44,6 @@ public class NotificationUI : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        // Hentikan coroutine saat script disable agar tidak mengeksekusi UI yang sudah destroyed
         StopAllCoroutines();
     }
 
@@ -51,12 +54,11 @@ public class NotificationUI : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Hentikan coroutine dari scene sebelumnya
         StopAllCoroutines();
-
-        // Bersihkan reference scene lama
         successCanvasGroup = null;
         failCanvasGroup = null;
+        successText = null;
+        failText = null;
 
         FindNotificationPanels();
     }
@@ -67,6 +69,7 @@ public class NotificationUI : MonoBehaviour
         if (successObj != null)
         {
             successCanvasGroup = successObj.GetComponent<CanvasGroup>();
+            successText = successObj.GetComponentInChildren<TextMeshProUGUI>();
             InitCanvasGroup(successCanvasGroup);
         }
 
@@ -74,6 +77,7 @@ public class NotificationUI : MonoBehaviour
         if (failObj != null)
         {
             failCanvasGroup = failObj.GetComponent<CanvasGroup>();
+            failText = failObj.GetComponentInChildren<TextMeshProUGUI>();
             InitCanvasGroup(failCanvasGroup);
         }
     }
@@ -85,14 +89,19 @@ public class NotificationUI : MonoBehaviour
             cg.alpha = 0f;
             cg.blocksRaycasts = false;
             cg.interactable = false;
-            cg.gameObject.SetActive(true); // GameObject-nya harus tetap Active
+            cg.gameObject.SetActive(true);
         }
     }
 
-    public void ShowSuccessNotification()
+    // --- FUNGSI BARU DENGAN PARAMETER ANGKA RATING ---
+    public void ShowSuccessNotification(int ratingGained)
     {
-        // Cari ulang jika reference missing/null
         if (successCanvasGroup == null) FindNotificationPanels();
+
+        if (successText != null)
+        {
+            successText.text = $"Pengiriman Berhasil! (+{ratingGained}%)";
+        }
 
         if (successCanvasGroup != null)
         {
@@ -101,10 +110,14 @@ public class NotificationUI : MonoBehaviour
         }
     }
 
-    public void ShowFailNotification()
+    public void ShowFailNotification(int ratingLost)
     {
-        // Cari ulang jika reference missing/null
         if (failCanvasGroup == null) FindNotificationPanels();
+
+        if (failText != null)
+        {
+            failText.text = $"Salah Alamat! ({ratingLost}%)";
+        }
 
         if (failCanvasGroup != null)
         {
@@ -117,13 +130,10 @@ public class NotificationUI : MonoBehaviour
     {
         if (cg == null) yield break;
 
-        // 1. Fade In (Muncul)
         float timer = 0f;
         while (timer < fadeDuration)
         {
-            // Null check setiap frame agar tidak throw MissingReferenceException saat scene reload
             if (cg == null) yield break;
-
             timer += Time.deltaTime;
             cg.alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
             yield return null;
@@ -132,15 +142,12 @@ public class NotificationUI : MonoBehaviour
         if (cg == null) yield break;
         cg.alpha = 1f;
 
-        // 2. Tahan Sebentar di Layar
         yield return new WaitForSeconds(displayDuration);
 
-        // 3. Fade Out (Hilang)
         timer = 0f;
         while (timer < fadeDuration)
         {
             if (cg == null) yield break;
-
             timer += Time.deltaTime;
             cg.alpha = Mathf.Lerp(1f, 0f, timer / fadeDuration);
             yield return null;

@@ -49,50 +49,58 @@ public class ItemDescriptionUI : MonoBehaviour
     {
         if (activeSlot != null && activeSlot.itemInSlot != null && backpackManager != null)
         {
-            // Ambil nama tujuan dari surat dan nama kotak pos (dengan penanganan null)
-            string targetSurat = activeSlot.itemInSlot.targetHouse;
+            ItemData currentItem = activeSlot.itemInSlot;
+
+            string targetSurat = currentItem.targetHouse;
             string namaKotakPos = (backpackManager.currentMailbox != null) ? backpackManager.currentMailbox.houseID : "";
 
-            // Pengecekan Alamat
-            if (targetSurat == namaKotakPos)
+            bool isCorrectAddress = (targetSurat == namaKotakPos);
+            float timeTaken = Time.time - currentItem.timePickedUp;
+
+            bool isLongDistance = false;
+            if (backpackManager.currentMailbox != null)
             {
-                backpackManager.ChangeRating(10);
-                if (NotificationUI.Instance != null) NotificationUI.Instance.ShowSuccessNotification();
+                isLongDistance = backpackManager.currentMailbox.CheckIsLongDistance();
+            }
+
+            // --- HITUNG RATING DAN SIMPAN BESARAN PERUBAHANNYA ---
+            int ratingBefore = BackpackManager.playerRating;
+            backpackManager.CalculateAndApplyRating(isCorrectAddress, timeTaken, isLongDistance);
+            int ratingChange = BackpackManager.playerRating - ratingBefore; // Selisih poin yang didapat/hilang
+
+            // Tampilkan Notifikasi Dinamis
+            if (isCorrectAddress)
+            {
+                if (NotificationUI.Instance != null)
+                    NotificationUI.Instance.ShowSuccessNotification(Mathf.Abs(ratingChange)); // Kirim angka perolehan
 
                 if (TutorialUI.Instance != null && TutorialUI.Instance.GetCurrentQuestStep() == TutorialUI.QuestStep.DeliverMails)
                 {
                     TutorialUI.Instance.UpdateQuestStep(TutorialUI.QuestStep.TutorialComplete);
                 }
-                Debug.Log("PENGIRIMAN SUKSES! Rating Naik.");
             }
             else
             {
-                backpackManager.ChangeRating(-5);
-                if (NotificationUI.Instance != null) NotificationUI.Instance.ShowFailNotification();
-                Debug.Log("SALAH ALAMAT! Rating Turun.");
+                if (NotificationUI.Instance != null)
+                    NotificationUI.Instance.ShowFailNotification(ratingChange); // Kirim angka penalti (minus)
             }
 
             activeSlot.ClearItem();
             ClearDescription();
 
-            // 1. Tambah jumlah surat terkirim (akses static langsung lewat nama Class)
             BackpackManager.deliveredMailsCount++;
 
-            // 2. Cek apakah semua surat hari ini sudah selesai diantar
             if (backpackManager.IsAllMailsProcessed())
             {
                 int finalDelivered = BackpackManager.deliveredMailsCount;
                 int totalMails = BackpackManager.totalMailsToday;
                 int currentRating = backpackManager.GetRating();
 
-                // Tampilkan Laporan End Of Day
                 if (EndOfDayUI.Instance != null)
                 {
                     EndOfDayUI.Instance.ShowEndOfDayReport(finalDelivered, totalMails, currentRating);
                 }
             }
-
-            Debug.Log($"[DELIVER] Terkirim: {BackpackManager.deliveredMailsCount} / Target: {BackpackManager.totalMailsToday}");
 
             backpackManager.CloseBackpack();
         }
