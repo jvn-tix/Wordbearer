@@ -108,15 +108,15 @@ public class TutorialUI : MonoBehaviour
         switch (currentStep)
         {
             case QuestStep.EnterOffice:
-                if (questText != null) questText.text = "- Enter the post office";
+                if (questText != null) questText.text = "Enter the post office";
                 break;
 
             case QuestStep.PickUpMails:
-                if (questText != null) questText.text = "- Pick up mails from the office";
+                if (questText != null) questText.text = "Pick up mails from the office";
                 break;
 
             case QuestStep.DeliverMails:
-                if (questText != null) questText.text = "- Deliver mails to the correct houses based from description";
+                if (questText != null) questText.text = "Deliver mails to the correct houses based from description";
                 break;
 
             case QuestStep.TutorialComplete:
