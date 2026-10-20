@@ -6907,7 +6907,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
   sceneToLoad: PostInterior
-  promptMessage: Press E to Enter
+  promptMessage: E
 --- !u!212 &1415530098
 SpriteRenderer:
   serializedVersion: 2
