@@ -2066,7 +2066,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: PurpleHouse
   interactPrompt: {fileID: 1179806246}
-  postOfficeTransform: {fileID: 0}
+  postOfficeTransform: {fileID: 1885749180}
   longDistanceThreshold: 25
 --- !u!61 &393584908
 BoxCollider2D:
@@ -3092,7 +3092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: BlueHouse
   interactPrompt: {fileID: 1179806246}
-  postOfficeTransform: {fileID: 0}
+  postOfficeTransform: {fileID: 1885749180}
   longDistanceThreshold: 25
 --- !u!61 &593877846
 BoxCollider2D:
@@ -3787,6 +3787,7 @@ GameObject:
   m_Component:
   - component: {fileID: 741137903}
   - component: {fileID: 741137902}
+  - component: {fileID: 741137904}
   m_Layer: 0
   m_Name: mountain anjay sky_0
   m_TagString: Untagged
@@ -3841,7 +3842,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1020133693
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7808100060559706233, guid: 1f09e48a5329e8046b1d68202b38f2f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3862,12 +3863,26 @@ Transform:
   m_GameObject: {fileID: 741137901}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2053424136}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &741137904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741137901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d1d57963226874f9d9409dce83d7c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxLayer
+  parallaxFactor: 0.95
+  infiniteHorizontal: 1
 --- !u!1 &855575275
 GameObject:
   m_ObjectHideFlags: 0
@@ -6330,6 +6345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1372981310}
   - component: {fileID: 1372981309}
+  - component: {fileID: 1372981311}
   m_Layer: 0
   m_Name: mountain anjay beneran_0
   m_TagString: Untagged
@@ -6384,7 +6400,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1322339137
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: -9
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8432567643677937698, guid: 61d08f0ae552cf14d996aa11c006ec05, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6405,12 +6421,26 @@ Transform:
   m_GameObject: {fileID: 1372981308}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8829356, y: -7.47601, z: 0}
+  m_LocalPosition: {x: 1.8829356, y: -27, z: 0}
   m_LocalScale: {x: 1.0169425, y: 0.93449426, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2053424136}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1372981311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372981308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d1d57963226874f9d9409dce83d7c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxLayer
+  parallaxFactor: 0.8
+  infiniteHorizontal: 1
 --- !u!1 &1379035489
 GameObject:
   m_ObjectHideFlags: 0
@@ -6907,7 +6937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
   sceneToLoad: PostInterior
-  promptMessage: E
+  promptMessage: Press E to Enter
 --- !u!212 &1415530098
 SpriteRenderer:
   serializedVersion: 2
@@ -7455,7 +7485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: GreenHouse
   interactPrompt: {fileID: 1179806246}
-  postOfficeTransform: {fileID: 0}
+  postOfficeTransform: {fileID: 1885749180}
   longDistanceThreshold: 25
 --- !u!61 &1724741661
 BoxCollider2D:
@@ -7998,6 +8028,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1762896110}
   - component: {fileID: 1762896109}
+  - component: {fileID: 1762896111}
   m_Layer: 0
   m_Name: mountain anjay bukit_0
   m_TagString: Untagged
@@ -8052,7 +8083,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1780631637
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: -8
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2710313948209837584, guid: 9a0054e94ed79094588629b81cbabd10, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8073,12 +8104,26 @@ Transform:
   m_GameObject: {fileID: 1762896108}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.42723414, y: -25.090736, z: 0}
+  m_LocalPosition: {x: -0.42723414, y: -52, z: 0}
   m_LocalScale: {x: 1.0030878, y: 0.7339992, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2053424136}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1762896111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762896108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d1d57963226874f9d9409dce83d7c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxLayer
+  parallaxFactor: 0.7
+  infiniteHorizontal: 1
 --- !u!1 &1782709849
 GameObject:
   m_ObjectHideFlags: 0
@@ -8376,6 +8421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1801081719}
   - component: {fileID: 1801081718}
+  - component: {fileID: 1801081720}
   m_Layer: 0
   m_Name: mountain anjay pohon bg_0
   m_TagString: Untagged
@@ -8430,7 +8476,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -412743767
   m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingOrder: -7
   m_MaskInteraction: 0
   m_Sprite: {fileID: -7172983901173754977, guid: cced0e0b8dccc8e4cb07e2164f7b9399, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8451,12 +8497,26 @@ Transform:
   m_GameObject: {fileID: 1801081717}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.08545868, y: -48.96787, z: 0}
+  m_LocalPosition: {x: -0.08545868, y: -61, z: 0}
   m_LocalScale: {x: 0.99749416, y: 0.96738297, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2053424136}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1801081720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801081717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d1d57963226874f9d9409dce83d7c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxLayer
+  parallaxFactor: 0.6
+  infiniteHorizontal: 1
 --- !u!1 &1804942712
 GameObject:
   m_ObjectHideFlags: 0
@@ -9364,7 +9424,7 @@ Transform:
   m_GameObject: {fileID: 2053424135}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 22.5352, y: 4.2, z: 0}
+  m_LocalPosition: {x: 2.81, y: 4.49, z: 0}
   m_LocalScale: {x: 0.06436787, y: 0.08025671, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9636,7 +9696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: RedHouse
   interactPrompt: {fileID: 1179806246}
-  postOfficeTransform: {fileID: 0}
+  postOfficeTransform: {fileID: 1885749180}
   longDistanceThreshold: 25
 --- !u!61 &2133910900
 BoxCollider2D:
@@ -9791,7 +9851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MailboxInteract
   houseID: OrangeHouse
   interactPrompt: {fileID: 1179806246}
-  postOfficeTransform: {fileID: 0}
+  postOfficeTransform: {fileID: 1885749180}
   longDistanceThreshold: 25
 --- !u!61 &2141505643
 BoxCollider2D:
