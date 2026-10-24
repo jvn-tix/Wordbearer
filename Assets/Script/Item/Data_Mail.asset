@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Data_Mail
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Water Bill
-  itemIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  itemIcon: {fileID: 4977379303211936881, guid: 42d702de2f5465840b01b8f02581c766, type: 3}
   itemDescription: Tagihan air bulan ini. Harap segera dikirimkan ke keluarga yang
     tinggal di rumah berwarna biru.
   targetHouse: BlueHouse
+  timePickedUp: 0

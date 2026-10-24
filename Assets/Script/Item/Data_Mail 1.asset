@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Data_Mail 1
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Plant Seeds
-  itemIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  itemIcon: {fileID: 4977379303211936881, guid: 42d702de2f5465840b01b8f02581c766, type: 3}
   itemDescription: Paket berisi bibit bunga mawar dan pupuk. Tertulis untuk nyonya
     yang hobi berkebun di rumah hijau.
   targetHouse: GreenHouse
+  timePickedUp: 0

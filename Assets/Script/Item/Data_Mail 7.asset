@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Data_Mail 7
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Fresh Oranges
-  itemIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  itemIcon: {fileID: 4977379303211936881, guid: 42d702de2f5465840b01b8f02581c766, type: 3}
   itemDescription: Satu kardus kecil berisi buah jeruk manis. Pastikan sampai ke
     pemilik rumah orange.
   targetHouse: OrangeHouse
+  timePickedUp: 0

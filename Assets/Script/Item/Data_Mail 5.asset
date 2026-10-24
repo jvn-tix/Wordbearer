@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Data_Mail 5
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: Holiday Postcard
-  itemIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  itemIcon: {fileID: 4977379303211936881, guid: 42d702de2f5465840b01b8f02581c766, type: 3}
   itemDescription: Kartu pos dari pantai tropis bergambar laut. Dikirim khusus untuk
     penghuni rumah biru.
   targetHouse: BlueHouse
+  timePickedUp: 0
