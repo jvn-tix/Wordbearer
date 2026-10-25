@@ -2,29 +2,26 @@ using UnityEngine;
 
 public class ParallaxLayer : MonoBehaviour
 {
+    [Tooltip("0 = bergerak normal seperti dunia, 1 = ikut kamera (terlihat sangat jauh)")]
     [SerializeField, Range(0f, 1f)] float parallaxFactor = 0.5f;
-    [SerializeField] bool infiniteHorizontal = true;
 
     Transform cam;
-    float startX, length;
+    Vector3 startPos;
+    float camStartX;
 
     void Start()
     {
         cam = Camera.main.transform;
-        startX = transform.position.x;
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        startPos = transform.position;
+        camStartX = cam.position.x;
     }
 
     void LateUpdate()
     {
-        float travelled = cam.position.x * parallaxFactor;
-        float fromStart = cam.position.x * (1f - parallaxFactor);
-
-        transform.position = new Vector3(startX + travelled, transform.position.y, transform.position.z);
-
-        if (!infiniteHorizontal) return;
-
-        if (fromStart > startX + length) startX += length;
-        else if (fromStart < startX - length) startX -= length;
+        float camDelta = cam.position.x - camStartX;
+        transform.position = new Vector3(
+            startPos.x + camDelta * parallaxFactor,
+            startPos.y,
+            startPos.z);
     }
 }
