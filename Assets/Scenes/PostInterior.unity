@@ -3263,6 +3263,8 @@ MonoBehaviour:
   moveSpeed: 5
   footstepAudioSource: {fileID: 1110895459}
   footstepClip: {fileID: 8300000, guid: 77ea50a3cb9f2fa469f7d5bc3382878e, type: 3}
+  dustParticle: {fileID: 0}
+  dustInterval: 0.2
 --- !u!114 &1110895452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6276,18 +6278,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aeabc85cf1a78b44a381f9578a9f8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackpackManager
-  backpackWindow: {fileID: 0}
+  backpackWindow: {fileID: 2111061452}
   backpackIconBtn: {fileID: 1368545}
   inventorySlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2097662464}
+  - {fileID: 243400627}
+  - {fileID: 849126074}
+  - {fileID: 1721109244}
+  - {fileID: 809053824}
+  - {fileID: 1542582662}
+  - {fileID: 248779394}
+  - {fileID: 1265511709}
+  - {fileID: 1233924778}
   isDeliveryMode: 0
   currentMailbox: {fileID: 0}
   ratingTextUI: {fileID: 1203380823}
