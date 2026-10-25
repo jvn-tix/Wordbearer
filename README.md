@@ -1,7 +1,7 @@
 ## Developer & Contributions
-Peace Anya (Game Designer)
-Jevon (Game Programmer)
-Jason (Game Programmer)
+Peace Anya (Game Designer) </br>
+Jevon (Game Programmer) </br>
+Jason (Game Programmer) </br>
 Sambalcapcay (Game Artist)
 
 ## About
