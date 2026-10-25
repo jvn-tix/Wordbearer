@@ -10,6 +10,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AudioSource footstepAudioSource;
     [SerializeField] private AudioClip footstepClip;
 
+    [Header("Walk Effects")]
+    public ParticleSystem dustParticle;
+    private float dustTimer;
+    public float dustInterval = 0.2f;
+
     private Vector2 horizontalMovement;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
@@ -38,6 +43,20 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         rb.linearVelocity = new Vector2(horizontalMovement.x * moveSpeed, rb.linearVelocity.y);
+
+        if (Mathf.Abs(horizontalMovement.x) > 0.1f)
+        {
+            dustTimer += Time.fixedDeltaTime;
+            if (dustTimer >= dustInterval)
+            {
+                PlayDust();
+                dustTimer = 0f;
+            }
+        }
+        else
+        {
+            dustTimer = dustInterval; // Reset timer saat berhenti bergerak
+        }
     }
 
     private void Update()
@@ -83,6 +102,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void PlayDust()
+    {
+        Debug.Log("Playing dust particle effect");
+        if (dustParticle != null)
+        {
+            dustParticle.Play();
+        }
+    }
     public void OnMove(InputAction.CallbackContext context)
     {
         horizontalMovement = context.ReadValue<Vector2>();
